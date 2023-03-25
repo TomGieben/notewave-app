@@ -16,7 +16,7 @@ class Notebook:
         self.fontSizePx = -20
         
         # Logo
-        ico = Image.open('D:\laragon\www\\notewave\\assets\logo.png')
+        ico = Image.open('D:\laragon\www\\app.notewave\\assets\logo.png')
         photo = ImageTk.PhotoImage(ico)
         main.iconphoto(False, photo)
 
