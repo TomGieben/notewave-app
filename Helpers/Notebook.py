@@ -3,6 +3,7 @@ from ttkbootstrap import *
 from ttkbootstrap.constants import *
 
 from Models.Note import *
+from Helpers.Icon import *
 from slugify import slugify
 import string
 import random
@@ -15,7 +16,7 @@ class Notebook:
         self.fontSizePx = -20
         
         # Logo
-        ico = Image.open('assets/logo.png')
+        ico = Image.open('D:\laragon\www\\notewave\\assets\logo.png')
         photo = ImageTk.PhotoImage(ico)
         main.iconphoto(False, photo)
 
@@ -23,7 +24,7 @@ class Notebook:
         self.fontspecs = font.Font(family="consolas", size=self.fontSizePx)
 
         # Notebook
-        self.notebook = tkb.Notebook(main, bootstyle="info")
+        self.notebook = tkb.Notebook(main, bootstyle="primary")
         self.notebook.pack(pady=10, expand=True)
 
         if(notes):
@@ -32,8 +33,11 @@ class Notebook:
         else:
             self.add_tab()
       
-        tkb.Button(main, text= "New", bootstyle="success", command=self.add_tab).grid(row=1, column=0, sticky="nsew")
-        tkb.Button(main, text= "Delete", bootstyle="danger", command=self.remove_tab).grid(row=1, column=1, sticky="nsew")
+        tkb.Button(main, text= "➕ New", bootstyle="success", command=self.add_tab).grid(row=1, column=0, sticky="nsew")
+        tkb.Button(main, text= "➖ Delete", bootstyle="danger", command=self.remove_tab).grid(row=1, column=1, sticky="nsew")
+        
+        main.grid_rowconfigure(0, weight=1) # this needed to be added
+        main.grid_columnconfigure(0, weight=1) 
 
     def new_font_size(self, event):
         if event.delta > 0:
