@@ -7,13 +7,16 @@ from Helpers.Icon import *
 from slugify import slugify
 import string
 import random
+import json
 
 class Notebook:
     def __init__(self, main):
         notes = Note.all()
+        self.id = {}
         self.main = main
         main.title('Notewave')
         self.fontSizePx = -20
+        self.user = json.loads(open('assets/user.json').read())
         
         # Logo
         ico = Image.open('D:\laragon\www\\app.notewave\\assets\logo.png')
@@ -28,7 +31,8 @@ class Notebook:
         self.notebook.pack(pady=10, expand=True)
 
         if(notes):
-            for note in Note.all():
+            for index, note in enumerate(Note.all()):
+                self.id[index] = note.id
                 self.add_tab(note)
         else:
             self.add_tab()
@@ -51,10 +55,10 @@ class Notebook:
         if not (note):
             letters = string.ascii_lowercase
             title = 'new-' + ''.join(random.choice(letters) for i in range(7))
-            content = ''
+            content = title + '\n'
         else:
             title = note.title
-            content = note.content
+            content = note.title + '\n' + note.content
             
         # Tab
         self.tab_frame = tkb.Frame(self.notebook)
@@ -69,25 +73,43 @@ class Notebook:
         self.tab_frame.grid_propagate(False)
         
     def remove_tab(self):
-        title = self.notebook.tab(self.notebook.select(), "text")
-        slug = slugify(title)
-        
-        self.notebook.forget(self.notebook.select())
-        Note.delete(slug)
-        
-        if not (Note.all()):
-            self.add_tab()
+        index = self.notebook.index(self.notebook.select())
+    
+        if index in self.id:
+            id = self.id[index]
+        else:
+            id = 0
             
+        self.notebook.forget(self.notebook.select())
+        self.id[index] = 0
+        Note.delete(id)        
         
     def save_tab(self, event):
-        title = self.notebook.tab(self.notebook.select(), "text")
-        content = event.widget.get("1.0",'end-1c')
+        index = self.notebook.index(self.notebook.select())
+        body = event.widget.get("1.0",'end-1c').split('\n', 2)
+        title = body[0]
         slug = slugify(title)
+        
+        if len(body) > 1:
+            content = body[1] 
+        else:
+            content = ''
+        
+        self.notebook.tab(self.notebook.select(), text=title)
+        
+        if index in self.id:
+            id = self.id[index]
+        else:
+            id = 0
+            
         data = {
+            "id": id,
+            "user_id": self.user['id'],
             "slug": slug, 
             "title": title,
             "content": content
         }
         
-        Note.save(data)
+        id = Note.save(data)
+        self.id[index] = id
 

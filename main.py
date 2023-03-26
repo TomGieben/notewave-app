@@ -1,5 +1,12 @@
 from Helpers.Notebook import *
+from Helpers.Login import *
+from Models.User import *
 
 main = tkb.Window()
-agc = Notebook(main)
+
+if User.isAuthenticated():
+    Notebook(main)
+else:
+    Login(main)
+    
 main.mainloop()
