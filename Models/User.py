@@ -1,4 +1,5 @@
 from Helpers.Connection import *
+from Helpers.ApiCall import *
 import time
 import datetime
 import requests
@@ -14,16 +15,12 @@ class User:
         
     @staticmethod
     def exists(email: str, password: str):
-        url = 'http://web.notewave.test/api/authenticate'
-        
-        data = {
+        apicall = ApiCall('authenticate', {
             "email":email,
             "password":password,
-        }
+        })
         
-        r = requests.post(url, params='', json=data)
-
-        return r.json()
+        return apicall.response
     
     @staticmethod
     def get(email: str):
