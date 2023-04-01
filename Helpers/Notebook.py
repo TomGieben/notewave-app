@@ -22,9 +22,17 @@ class Notebook:
         ico = Image.open('D:\laragon\www\\app.notewave\\assets\logo.png')
         photo = ImageTk.PhotoImage(ico)
         main.iconphoto(False, photo)
+        main.style.theme_use('cosmo')
 
         # Font
         self.fontspecs = font.Font(family="consolas", size=self.fontSizePx)
+        
+        # Style
+        style = Style()
+        style.colors.primary = "#241827"
+        style.colors.secondary = "#CD8287"
+        style.colors.success = "#198754"
+        style.colors.danger = "#DC3545"
 
         # Notebook
         self.notebook = tkb.Notebook(main, bootstyle="primary")
